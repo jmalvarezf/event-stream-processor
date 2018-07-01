@@ -1,0 +1,9 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
+customer:
+  service-url: ${CUSTOMER_SERVICE:http://localhost:8080/customers}
+logging:
+  level:
+    root: INFO
+    es.eci.elejandria: DEBUG

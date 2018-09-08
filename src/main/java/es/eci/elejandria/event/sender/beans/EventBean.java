@@ -5,8 +5,8 @@ import java.util.List;
 
 public class EventBean {
 
-    private enum EventType {
-        CLICK, BUY, RECOMMEND, RETURN
+    public enum EventType {
+        CLICK, BUY, RETURN
     }
 
     private enum Origin {
@@ -22,6 +22,26 @@ public class EventBean {
     private CustomerBean customer;
 
     private Date timestamp;
+
+    private Promotion promotion;
+
+    private Boolean isCustomerAllowed;
+
+    public Boolean getCustomerAllowed() {
+        return isCustomerAllowed;
+    }
+
+    public void setCustomerAllowed(Boolean customerAllowed) {
+        isCustomerAllowed = customerAllowed;
+    }
+
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
 
     public EventType getEventType() {
         return eventType;

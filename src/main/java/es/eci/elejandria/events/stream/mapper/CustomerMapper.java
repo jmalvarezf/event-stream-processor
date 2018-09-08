@@ -25,9 +25,11 @@ public class CustomerMapper implements KeyValueMapper<String, EventBean, KeyValu
                 = restTemplate.getForObject(url + "/" + eventBean.getCustomer().getCustomerId(), ResponseBean.class);
         if (response.getIsallowedToUseData()) {
             //allowed to use data
+            eventBean.setCustomerAllowed(true);
             return new KeyValue<String, EventBean>(key, eventBean);
         } else {
             //not allowed
+            eventBean.setCustomerAllowed(false);
             eventBean.getCustomer().setCustomerId(0);
             eventBean.getCustomer().setName("XXXXX");
             eventBean.getCustomer().setPhoneNumber("000000000");

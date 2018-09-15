@@ -1,5 +1,7 @@
 package es.eci.elejandria.event.sender.beans;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +30,7 @@ public class EventBean {
 
     private CustomerBean customer;
 
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
     private Date timestamp;
 
     private Promotion promotion;

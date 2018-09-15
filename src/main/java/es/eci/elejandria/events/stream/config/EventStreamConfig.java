@@ -11,10 +11,6 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.Input;
-import org.springframework.cloud.stream.annotation.Output;
-import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -22,7 +18,6 @@ import org.springframework.kafka.annotation.EnableKafkaStreams;
 import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerde;
-import org.springframework.messaging.handler.annotation.SendTo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +29,12 @@ public class EventStreamConfig {
 
     @Autowired
     private KafkaProperties kafkaProperties;
+
+    @Autowired
+    private CustomerMapper customerMapper;
+
+    @Autowired
+    private PromotionMapper promotionMapper;
 
     @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
     public StreamsConfig kStreamsConfigs() {
@@ -52,6 +53,13 @@ public class EventStreamConfig {
         KStream<String, EventBean> stream = builder.stream("events-checked", Consumed.with(Serdes.String(), new JsonSerde<>(EventBean.class)));
         Predicate<String, EventBean> hasPromo = (k, v) -> v.getPromotion() != null;
         stream.filter(hasPromo).to("promotions");
+        return stream;
+    }
+
+    @Bean
+    public KStream<String, EventBean> eventStreams(StreamsBuilder builder) {
+        KStream<String, EventBean> stream = builder.stream("events", Consumed.with(Serdes.String(), new JsonSerde<>(EventBean.class)));
+        stream.map(customerMapper).map(promotionMapper).to("events-checked");
         return stream;
     }
 

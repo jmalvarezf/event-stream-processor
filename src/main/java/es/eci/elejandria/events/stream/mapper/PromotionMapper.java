@@ -28,9 +28,25 @@ public class PromotionMapper implements KeyValueMapper<String, EventBean, KeyVal
                 int high = 20;
                 promo.setBenefit(random.nextInt(high - low) + low);
                 promo.setBenefitType(Promotion.BENEFIT_TYPE.DISCOUNT);
-                promo.setDescription("Promoción asociada a compra");
+                if (eventBean.getEventType().equals(EventBean.EventType.RETURN)) {
+                    promo.setDescription("Sentimos su devolución. Para hacer mas fáciles sus compras en El Corte Inglés a futuro, le regalamos un descuento de un " + promo.getBenefit() + "% en su proxima compra");
+                } else {
+                    promo.setDescription("Gracias por su compra. Para premiar su fidelidad, le regalamos un descuento de un " + promo.getBenefit() + "% en su proxima compra");
+                }
                 promo.setName("Order_Promotion");
                 eventBean.setPromotion(promo);
+            }
+            if (eventBean.getEventType().equals(EventBean.EventType.BUY) && eventBean.getPromotion() != null) {
+                boolean isSports = false;
+                for (ProductBean product : eventBean.getProducts()) {
+                    if (product.getCategory().equals(ProductBean.Category.SPORTS)) {
+                        Promotion promo = new Promotion();
+                        promo.setBenefitType(Promotion.BENEFIT_TYPE.MULTIPLE);
+                        promo.setBenefit(10);
+                        promo.setName("Ball");
+                        promo.setDescription("Regalamos un balón valorado en 10€ por la compra de cualquier articulo de Deportes.");
+                    }
+                }
             }
         }
         return new KeyValue<String, EventBean>(s, eventBean);

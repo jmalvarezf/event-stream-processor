@@ -20,6 +20,7 @@ public class CustomerMapper implements KeyValueMapper<String, EventBean, KeyValu
 
     @Override
     public KeyValue<String, EventBean> apply(String key, EventBean eventBean) {
+        log.info("Mapping event: " + eventBean);
         RestTemplate restTemplate = new RestTemplate();
         ResponseBean response
                 = restTemplate.getForObject(url + "/" + eventBean.getCustomer().getCustomerId(), ResponseBean.class);

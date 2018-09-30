@@ -36,7 +36,7 @@ public class PromotionMapper implements KeyValueMapper<String, EventBean, KeyVal
                 promo.setName("Order_Promotion");
                 eventBean.setPromotion(promo);
             }
-            if (eventBean.getEventType().equals(EventBean.EventType.BUY) && eventBean.getPromotion() != null) {
+            if (eventBean.getEventType().equals(EventBean.EventType.BUY) && eventBean.getPromotion() == null) {
                 boolean isSports = false;
                 for (ProductBean product : eventBean.getProducts()) {
                     if (product.getCategory().equals(ProductBean.Category.SPORTS)) {
@@ -45,6 +45,8 @@ public class PromotionMapper implements KeyValueMapper<String, EventBean, KeyVal
                         promo.setBenefit(10);
                         promo.setName("Ball");
                         promo.setDescription("Regalamos un balón valorado en 10€ por la compra de cualquier articulo de Deportes.");
+                        eventBean.setPromotion(promo);
+                        break;
                     }
                 }
             }
